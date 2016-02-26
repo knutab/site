@@ -1,0 +1,21 @@
+---
+layout: default
+---
+
+<br>
+<br>
+<div>
+	<h2>Recent Projects</h2>
+	<ul>
+		{% for projects in site.categories.project %}
+		<br>
+		<li>
+			<strong><a class="list" href="{{site.baseurl}}{{projects.url}}">{{projects.title}}</a></strong>
+			<h4>{{projects.meta}}</a></h4>
+		</li>
+		{% endfor %}
+	</ul>
+
+
+
+</div>

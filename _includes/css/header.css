@@ -1,0 +1,41 @@
+
+#header {
+    background: #303030;
+    height: 160px;
+    width: 100%;
+}
+
+#header nav {
+    float: left;
+}
+
+#header nav ul {
+    margin-top: 100px;
+}
+
+#header nav ul li {
+    display: inline-block;
+    margin-left: 20px;
+    list-style: none;
+}
+
+#header nav ul li a {
+    font-size: 20px;
+    color: #F0F0F0;
+    text-decoration: none;
+}
+
+#header nav ul li a:hover {
+    font-size: 23px;
+    color: #F0F0F0;
+    text-decoration: none;
+}
+
+#image {
+    background-image: url(../img/navlogo.png);
+    width: 274px;
+    height: 121px;
+    float: left; 
+    margin-top: 20px;
+    margin-left: 200px;
+}

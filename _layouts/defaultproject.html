@@ -1,0 +1,28 @@
+<!Doctype html>
+
+<html lang="en ca">
+
+<head>
+	<meta charset="utf-8">
+	<title>My test site v3</title>
+	<link rel="stylesheet" type="text/css" href="{{site.baseurl}}/css/main.css">
+
+
+	<!-- Javascript code to use MathJax for math equations on sites !-->
+	<script type="text/javascript" async
+	src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+	</script>
+
+	<!-- Javascript file for adding the code formating for Python code in the browser. !-->
+	<script src="{{site.baseurl}}/js/prettify.js"> </script>
+
+</head>
+
+
+{% include header.html %}
+	
+	<div class="main-text">
+		{{content}}
+	</div>
+
+{%include footer.html %}
