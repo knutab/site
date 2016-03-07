@@ -1,0 +1,312 @@
+---
+layout: defaultproject
+title: Backtesting a simple Momentum Strategy using Python
+meta: Testing a simple Momentum Strategy using Quandl data in Python
+categories: project
+---
+
+<br>
+<br>
+<h1> Backtesting a simple Momentum Strategy in Python </h1>
+<br>
+<br>
+<h3>This Project is created to display how to back test a simple trading strategy using Python, and is because of its simplicity just to be taken as a fun project and nothing else. The selected "Universe" of selected stocks is small and not corrected for Survivorship Bias, there is no accounting for the transaction costs, and I assume that trades can be done at the closing prices of the day they are recorded. All of this is assumptions that are unrealistic and can contribute to giving a highly unreliable result. In addition I have done nothing to check the quality of the data used. This is just shown as a simple way to back test a strategy using Python, and should be looked on as nothing else.  </h3>
+<br>
+<br>
+<br>
+<h2> Getting data </h2>
+<br> 
+<p> The first step is to select and find the historical prices for the stocks used. To keep this simple I choose to just use the stocks currently (03.02.16) in the S&P 100 index. To get the historical prices I will use  <a href="https://www.quandl.com/">Quandl</a> since they supply free historical stock prices for a large amount of stocks, in addition to having an easy to use Python API. To use the Quandl API the first step is to install the Quandl Python package. This can be done using pip install Quandl or following the guide on the Quandl website.</p>
+<br>
+<p> The next step is to get the ticker symbols for the stocks in S&P 100 index, this can easily be done by webscraping the S&P 100 page on Wikipedia using urllib and BeautifulSoup. </p>
+<br>
+<br>
+<p> This project will use the following Python packages that is not included as standard and have to be installed manually.</p>
+<br>
+<p> Quandl</p>
+<p> Pandas </p>
+<p> Numpy</p>
+<p> Matplotlib</p>
+<p> BeautifulSoup</p>
+<br>
+<br>
+<div class="code-wrapper">
+<pre class="prettyprint linenums:">
+
+import Quandl
+import pandas as pd
+from bs4 import BeautifulSoup
+import urllib.request
+import numpy as np
+import matplotlib.pyplot as plt
+
+#Function to download tickers and company names from Wikipedia, and format
+#them so they can be used to download data from Quandl
+def get_tickers():
+
+    wiki = "https://en.wikipedia.org/wiki/S%26P_100"
+
+    response = urllib.request.urlopen(wiki)
+
+    html = response.read()
+
+    soup = BeautifulSoup(html)
+
+
+    table = soup.find("table", {"class" : "wikitable sortable" })
+
+    ticker = []
+    name = []
+
+    for row in table.findAll("tr"):
+        cells = row.findAll("td")
+        try:
+            symbol = cells[0]
+            symbol = str(symbol)
+            symbol = symbol[4 : -5]
+            ticker.append(symbol)
+            
+
+            title = cells[1]
+            title = str(title)
+            title = title.split("title=", 1)[1].split(">", 1)[0]
+            title = title[1 : -1]
+            title = title.replace("&amp;amp;", "&")
+            name.append(title)
+        except:
+            Exception
+
+    quandl_ticker = []
+
+    for i in ticker:
+        quandl = "WIKI/%s.11" %(i)
+        quandl_ticker.append(quandl)
+
+    return quandl_ticker, name
+
+</pre>
+</div>
+<br>
+<br>
+<p> This creates two lists, one containing the stock symbol, and one containing the stock names. The next step is to use the list of stock symbols to download the historical prices for the stocks. Before the stock symbols can be used on Quandl there is some formatting that have to be done. The first is to add a prefix containing the database we want to use. In this case it is "WIKI" and the other part is to add what data we want. We only need the adjusted close price price, in this case is selected by adding .11 to the symbol. </p>
+<br>
+<br>
+<p> For some of the calculations later we also need some additional functions. After running the test I want to compare the geometric returns and the standard deviations from different amount of stocks held, and I also want to compare the total return and growth of 100 invested in the strategies.</p>
+<br>
+<br>
+<div class="code-wrapper">
+<pre class="prettyprint linenums:53">
+
+#Other functions used later in the program
+def geometric_return(returns):
+
+    returnseries = []
+    last = 1
+    for i in returns:
+        calc = last + (i * last)
+        returnseries.append(calc)
+        last = calc
+    returns = pd.DataFrame(returnseries)
+    total = (last-1)/1
+    geo = (total + 1)**(1/(len(returns) / 12))-1
+    return geo
+
+
+def std_dev(returns):
+    data = np.asarray(returns)
+    stddev = np.std(data) * np.sqrt(12)
+    return stddev
+
+
+def returnseries(returns):
+    returnseries = []
+    last = 100
+    for i in returns:
+        calc = last + (i * last)
+        returnseries.append(calc)
+        last = calc
+    series = pd.Series(returnseries)
+    return series
+
+</pre>
+</div>
+<p> Now everything is ready to download the data and start creating the code for the back testing. </p>
+<br>
+<br>
+<div class="code-wrapper">
+<pre class="prettyprint linenums:85">
+
+#Reading in data to avoid having to download all the data everytime.
+try:
+    data = pd.read_csv('data.csv', index_col='Date', parse_dates=True)
+    
+except:
+    print('Datafile not found, downloading from Quandl')
+    
+    #Run the function to get the tickers, and format them to work on Quandl
+    tickers = get_tickers()
+    
+    data = Quandl.get(tickers[0], authtoken="XPEwsnYm1WTxhBfah_bh", trim_start="1999-12-20",
+                    trim_end="2016-01-01", collapse="monthly")
+
+    #Saves the file to the same folder containing the script
+    data.to_csv('data.csv')
+
+</pre>
+</div>
+<br>
+<br>
+<p> The complete dataset can also be downloaded as a csv file <a href="{{site.baseurl}}/files/data.csv">HERE</a> instead of using the Quandl package to download it. If this file is saved in the same folder as the python script it will not try to download the data from Quandl. </p>
+<br>
+<br>
+<h2> The Momentum Strategy </h2>
+<br>
+<p> The strategy is simply that we look back on the stocks return during the last 12 months, and ranks the stocks on the total return over the period. Then we pick some number of stocks and hold them for the following month. Next month we repeat the same procedure. I will use data from 2000 up until 2016, where the first year is just used for the momentum calculations. Then from 2001 we start trading the strategy. As seen in the script above the data downloaded is on a monthly frequency. This is chosen just to make the coding of the strategy a bit easier, the tradeoff is that I then have to assume that we can buy or sell stocks on the closing price on the day of the trade. I will test how this strategy would have performed for some different numbers of stocks held. I will test it for 5, 10, 15, 20, 25, and 30 of the stocks with the highest one year momentum.</p>
+<br>
+<br>
+<div class="code-wrapper">
+<pre class="prettyprint linenums:102">
+
+Creates a DataFrame containing the one month return's and shifts it up one step to keep the next step easyer.
+holding = data.pct_change(periods=1)
+holding = holding.shift(periods=-1)
+
+#Creates a DataFrame containing the one year return's used to select the best performing stocks for each month.
+momentum = data.pct_change(periods=12)
+
+#Creates a list of numbers of stocks to hold and test returns for. Here it is 1 to 10.
+a = [5, 10, 15, 20, 25, 30]
+lst = [ [] for i in a]
+
+results = pd.DataFrame()
+
+b = 0
+for index, row in data.iterrows():
+    
+    if b > 11:
+        #print(row)
+        momentum_i = momentum.ix[b]
+        returns_i = holding.ix[b]
+
+        for column in data:
+
+            momentum_stock = momentum_i[column]
+            returns_stock = returns_i[column]
+        
+            results = results.append({'Ticker' : column, 'Momentum' : momentum_stock, 'Returns' : returns_stock}, 
+            ignore_index=True)
+        
+
+        
+        i = 0 
+        for list in lst:
+            value = a[i]
+            result = results.sort_values("Momentum", ascending = False).head(value)
+            list.append(result['Returns'].mean())
+            i += 1
+        
+    b+=1
+    results = pd.DataFrame()
+        
+
+_5 = lst[0][ : -1]
+_10 = lst[1][ : -1]
+_15 = lst[2][ : -1]
+_20 = lst[3][ : -1]
+_25 = lst[4][ : -1]
+_30 = lst[5][ : -1]
+
+
+
+
+results_all = [_5, _10, _15, _20, _25, _30]
+
+#Create a loop to calculate geometric return for all the different holdings
+geometric_returns = []
+
+for i in results_all:
+    geo_ret = geometric_return(i)
+    geometric_returns.append(geo_ret)
+
+standard_deviation =  []
+
+for i in results_all:
+    std = std_dev(i)
+    standard_deviation.append(std)
+
+
+#Plots the Geometric Return for each number of holdings
+y = geometric_returns
+N = len(y)
+x = np.arange(1, N+1)
+labels = ['5', '10', '15', '20', '25', '30']
+width = 0.7
+bar1 = plt.bar(x, y, width)
+plt.ylabel('Geometric Return')
+plt.xlabel('Number of Holdings')
+plt.xticks(x + width/2.0, labels)
+plt.show()
+
+#Plots the Standard Deviation for each number of holdings
+y = standard_deviation
+N = len(y)
+x = np.arange(1, N+1)
+labels = ['5', '10', '15', '20', '25', '30']
+width = 0.7
+bar1 = plt.bar(x, y, width, color="y" )
+plt.ylabel('Standard Deviation')
+plt.xlabel('Number of Holdings')
+plt.xticks(x + width/2.0, labels)
+plt.show()
+
+#Plots the total equity curve for for each number of holdings
+datelabel = data.index
+datelabel = datelabel[ 13 : ]
+
+plt.plot(datelabel, returnseries(_5))
+plt.plot(datelabel, returnseries(_10))
+plt.plot(datelabel, returnseries(_15))
+plt.plot(datelabel, returnseries(_20))
+plt.plot(datelabel, returnseries(_25))
+plt.plot(datelabel, returnseries(_30))
+
+plt.xlabel('Number of Holdings')
+plt.legend(['5', '10', '15', '20', '25', '30'], loc=2)
+plt.title('Total Return on 100 investet in the different portfolios')
+plt.show()
+
+</pre>
+</div>
+<br>
+<br>
+<h2> The Result </h2>
+<br>
+<p> The code above generates three graphs that summarize the results from the back test. The first one is the bar chart showing the Geometric Return for the different numbers of stocks held. </p>
+<br>
+<center>
+<img src = "{{site.baseurl}}/img/momentum strat/geometric_return.png" >
+</center>
+<br>
+<p> As we can see here there is not much difference in the geometric return for different amounts of stocks held. This is not very surprising considering that the "Universe" of stocks is the S&P 100.</p>
+<br>
+<br>
+<center>
+<img src = "{{site.baseurl}}/img/momentum strat/standard_deviation.png" >
+</center>
+<br>
+<p> As we can see there is some effect on the volatility of the strategy when we select a larger number of stocks. The effect however is quite small. And it is probably mostly caused by diversifying away some of the firm specific risks since the correlation between the different stocks in the S&P 100 can be expected to be fairly high which in turn causes the diversification effect to be small..</p>
+<br>
+<br>
+<center>
+<img src = "{{site.baseurl}}/img/momentum strat/equity_curve.png" >
+</center>
+<br>
+<p> Lastly the figure shows the theoretical growth of the different portfolios. I would like to state again that this was just an example of how to back test a trading strategy in Python. I have made lots of simplifying assumptions, and there have been no check of the data and the quality of it. In addition using just the companies that is now listed in the S&P 100 introduces a huge survivorship bias to the test since the companies that are currently in the S&P 100 have gotten there because they have been successful, and this strategy tries to pick stocks based on their previous returns.</p>
+<br>
+<br>
+<p> The complete python script can be downloaded <a href="{{site.baseurl}}/files/Momentum.py">HERE</a></p>
+<br>
+<br>
+<script>
+prettyPrint();
+</script>
