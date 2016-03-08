@@ -5,4 +5,44 @@ layout: default
 <br>
 <br>
 <br>
-<h1> Nothing here, contact form is still under development.  </h1>
+<center>
+<form id="contactform" method="POST">
+	<div>
+		<br>
+		<br>
+		<center><h1> Contact Form </h1></center>
+		<br>
+		<br>
+		<label>
+			<span>Name</span><input type="text" name="name">
+		</label>
+		<br>
+		
+		<br>
+		<label>
+			<span>Your Email</span><input type="email" name="_replyto">
+		</label>
+		<br>
+	
+		<br>
+		<label>
+			<span>Subject</span><input type="text" name="subject">
+		</label>
+		<br>
+		<br>
+		<br>
+		<textarea name="message"></textarea>
+		<br>
+		<br>
+		<input type="submit" value="Send">
+
+		<input  type="text" name="_gotcha"  style="display:none" />
+		<input type="hidden" name="_subject" value="My Project Site" />
+	</div>	
+</form>         
+</center>
+
+<script>
+    var contactform =  document.getElementById('contactform');
+    contactform.setAttribute('action', '//formspree.io/' + 'kab.project.site' + '@' + 'gmail' + '.' + 'com');
+</script>
