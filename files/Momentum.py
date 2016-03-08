@@ -89,7 +89,7 @@ except:
     #Run the function to get the tickers, and format them to work on Quandl
     tickers = get_tickers()
     
-    data = Quandl.get(tickers[0], authtoken="Add Your Own Token", trim_start="1999-12-20",
+    data = Quandl.get(tickers[0], authtoken="Add Your AuthToken Here", trim_start="1999-12-20",
                     trim_end="2016-01-01", collapse="monthly")
 
     #Saves the file to the same folder containing the script
