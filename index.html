@@ -11,10 +11,11 @@ layout: default
 <br>
 <br>
 <div>
-	<strong>Recent Projects</strong>
+	<strong>Recent Projects:</strong>
+	<br>
 	<br>
 	<ul>
-		{% for projects in site.categories.project %}
+		{% for projects in site.categories.project limit:5 %}
 		<li>
 			<a class="list" href="{{site.baseurl}}{{projects.url}}">{{projects.title}}</a>
 		</li>
