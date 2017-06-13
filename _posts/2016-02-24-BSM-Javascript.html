@@ -1,0 +1,385 @@
+---
+layout: default
+title: Black Scholes calculator in Javascript
+meta: Black-Scholes option pricing formula and some additional calculations in an online calculator. Project includes the javascript formulas and the running example on the site.
+categories: project
+tags: javascript
+img_name: bsm_js_small.jpg
+permalink: /:title.html
+---
+
+<script src="{{site.baseurl}}/js/bsm.js"> </script>
+<br>
+<br>
+<br>
+<h1> Black Scholes Calculator implemented using Javascript</h1>
+<br>
+<p> All the formulas used here is the same ones that is used in the <a href="{{ site.baseurl }}{% link _posts/2015-12-31-BSM-Calculator.html %}">Black Scholes Option Pricing Calculator in Python</a> project. </p>
+<br>
+<br>
+
+<form>
+<div class="row">
+    
+    <div class="col-md-6">
+
+        <div class="form-group row">
+            <div class="col-3">
+            </div>
+
+            <div class="col-3">
+                <input type="radio" name="type" value="c">Call
+                <br>
+                <input type="radio" name="type" value="p">Put
+
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <label for="example-text-input" class="col-3 col-form-label">Stock Price</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" id="price" NAME="price">
+                </div>
+        </div>
+        
+        <div class="form-group row">
+            <label for="example-search-input" class="col-3 col-form-label">Strike Price</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" id="strike" NAME="strike">
+                </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="example-search-input" class="col-3 col-form-label">Risk Free Rate</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" id="riskfree" NAME="riskfree">
+                </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="example-search-input" class="col-3 col-form-label">Standard Deviation</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" id="std" TEXT="std">
+                </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="example-search-input" class="col-3 col-form-label">Days to Expiration</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" id="time" NAME="time">
+                </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="example-search-input" class="col-3 col-form-label">Market Value</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" id="MV" NAME="MV">
+                </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-6">
+                <label>
+                    <input type="button" class="form-control" value="Calculate" onClick="run(this.form)" />
+                </label>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="col-md-6">
+        
+        <div class="form-group row">
+            <label for="example-text-input" class="col-3 col-form-label">Option Value</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" disabled="disabled" id="value" NAME="value">
+                </div>
+        </div>
+        
+        <div class="form-group row">
+            <label for="example-search-input" class="col-3 col-form-label">Intrensic Value</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" disabled="disabled" id="IV" NAME="IV">
+                </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="example-search-input" class="col-3 col-form-label">Time Value</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" disabled="disabled" id="TV" NAME="TV">
+                </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="example-search-input" class="col-3 col-form-label">Delta</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" disabled="disabled" id="delta" NAME="delta">
+                </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="example-search-input" class="col-3 col-form-label">Vega 1%</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" disabled="disabled" id="vega" NAME="vega">
+                </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="example-search-input" class="col-3 col-form-label">Gamma</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" disabled="disabled" id="gamma" NAME="gamma">
+                </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="example-search-input" class="col-3 col-form-label">Theta / 365</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" disabled="disabled" id="theta" NAME="theta">
+                </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="example-search-input" class="col-3 col-form-label">Rho 1%</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" disabled="disabled" id="rho" NAME="rho">
+                </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="example-search-input" class="col-3 col-form-label">Implied Volatility</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" disabled="disabled" id="imp" NAME="imp">
+                </div>
+        </div>
+
+    </div>
+
+</div>
+
+        <script> 
+            function run(form){
+                
+                var S = parseFloat(form.price.value);
+                var X = parseFloat(form.strike.value);
+                var v = parseFloat(form.std.value);
+                var r = parseFloat(form.riskfree.value);
+                var T = parseFloat(form.time.value / 365.0);
+                var MV = parseFloat(form.MV.value);
+                var Flag = form.type.value;
+                
+               
+                document.getElementById('value').value = 0.0
+                document.getElementById('IV').value = 0.0
+                document.getElementById('TV').value = 0.0
+                document.getElementById('delta').value = 0.0
+                document.getElementById('vega').value = 0.0
+                document.getElementById('gamma').value = 0.0
+                document.getElementById('theta').value = 0.0
+                document.getElementById('rho').value = 0.0
+                document.getElementById('imp').value = 0.0
+                
+                document.getElementById('value').value = BSM(Flag, S, X, v, r, T).toFixed(4);
+                document.getElementById('IV').value = IV(Flag, S, X).toFixed(4);
+                document.getElementById('TV').value = TV(Flag, S, X, v, r, T).toFixed(4);
+                document.getElementById('delta').value = delta(Flag, S, X, v, r, T).toFixed(4);
+                document.getElementById('vega').value = vega(S, X, v, r, T).toFixed(4);
+                document.getElementById('gamma').value = gamma(S, X, v, r, T).toFixed(4);
+                document.getElementById('theta').value = theta(Flag, S, X, v, r, T).toFixed(4);
+                document.getElementById('rho').value = rho(Flag, S, X, v, r, T).toFixed(4);
+                document.getElementById('imp').value = NewtonBSM(Flag, S, X, r, T, MV).toFixed(4);  
+            }
+        </script>
+
+</form>
+
+<br>
+<br>
+
+
+
+
+
+
+            
+          
+            
+            
+<br>
+<br>
+<br>
+
+<div class="code-wrapper">
+<pre class="prettyprint linenums:">
+
+/* The cummulative Normal distribution function copied from 
+http://www.espenhaug.com/black_scholes.html */
+
+function CND(x){
+
+var a1, a2, a3, a4 ,a5, k ;
+
+a1 = 0.31938153, a2 =-0.356563782, a3 = 1.781477937, a4= -1.821255978 , a5= 1.330274429;
+
+if(x<0.0)
+return 1-CND(-x);
+else
+k = 1.0 / (1.0 + 0.2316419 * x);
+return 1.0 - Math.exp(-x * x / 2.0)/ Math.sqrt(2*Math.PI) * k
+* (a1 + k * (-0.356563782 + k * (1.781477937 + k * (-1.821255978 + k * 1.330274429)))) ;
+}
+
+/* Formula for calculating d1 */
+function d1(S, X, v, r, T){
+    var d1;
+    d1 = (Math.log(S / X) + (r + v * v / 2.0) * T) / (v * Math.sqrt(T));
+    return d1;
+
+}
+
+/* Formula for calculating d1 */
+function d2(S, X, v, r, T){
+    var d2;
+    d2 = d1(S, X, v, r, T) - v * Math.sqrt(T);
+    return d2;
+}
+
+/*Formula for calculating the Black Scholes Option value */
+function BSM(Flag, S, X, v, r, T){
+
+if (Flag==="c")
+    
+    return S * CND(d1(S, X, v, r, T)) - X * Math.exp(-r * T) * CND(d2(S, X, v, r, T));
+
+if (Flag==="p")
+    
+    return X * Math.exp(-r * T) * CND(-d2(S, X, v, r, T)) - S * CND(-d1(S, X, v, r, T));
+}
+
+/* Formula's for calculating N'(d1) and N'(d2) to simplify some of the
+calculations later */
+
+function dNd1(S, X, v, r, T){
+
+    return (1.0/Math.sqrt(2.0*Math.PI))*Math.exp(-(d1(S,X,v,r,T)*d1(S,X,v,r,T))/2.0);
+}
+
+function dNd2(S, X, v, r, T){
+
+    return (1.0/Math.sqrt(2.0*Math.PI))*Math.exp(-(d2(S,X,v,r,T)*d2(S,X,v,r,T))/2.0);
+}
+
+/*Formula for calculation the Intrensic Value of the option*/
+function IV(Flag, S, X){
+    
+    if (Flag==='c'){
+        
+        if(S - X > 0){
+            return S - X;
+        }
+        else{
+            return 0;
+        }
+    }
+    
+    if (Flag==='p'){ 
+        
+        if(X - S > 0){
+            return X - S;
+        }
+        else{
+            return 0;
+        }
+    }
+}
+
+/*Formula for calculation the Time Value of the option*/
+function TV(Flag, S, X, v, r, T){
+    
+    if(Flag==='c'){
+        return BSM('c', S, X, v, r, T) - IV('c', S, X);
+    }
+    else{
+        return BSM('p', S, X, v, r, T) - IV('p', S, X);
+    }
+}
+
+/*Formulas for calculating the greeks */
+function delta(Flag, S, X, v, r, T){
+    
+    if(Flag==='c'){
+        return CND(d1(S, X, v, r, T));
+    }
+    else{
+        return CND(d1(S, X, v, r, T)) - 1;
+    }
+}
+
+function vega(S, X, v, r, T){
+ 
+    return (S * Math.sqrt(T) * (Math.exp((-0.5 * d1(S, X, v, r, T)*d1(S, X, v, r, T))) / 
+        Math.sqrt(2.0 * Math.PI))) / 100.0;
+}
+
+function gamma(S, X, v, r, T){
+    
+    return ((X * Math.exp(-r * T) * dNd2(S, X, v, r, T)) / (S * S * v * Math.sqrt(T)));
+}
+
+function theta(Flag, S, X, v, r, T){
+    
+    if(Flag==='c'){
+        return (-X * Math.exp(-r * T) * (r * CND(d2(S, X, v, r, T)) + ((v * dNd2(S, X, v, r, T) ) / 
+            (2.0 * Math.sqrt(T))))) / 365.0;
+    }
+    else{
+        return (X * Math.exp(-r * T) * (r * CND(-d2(S, X, v, r, T)) - ((v * dNd2(S, X, v, r, T) ) / 
+            (2.0 * Math.sqrt(T))))) / 365.0;
+    }
+}
+
+function rho(Flag, S, X, v, r, T){
+    
+    if(Flag==='c'){
+        return (T * X * Math.exp(-r * T) * CND(d2(S, X, v, r, T))) / 100.0;
+    }
+    else{
+        return (T * X * Math.exp(-r * T) * CND(-d2(S, X, v, r, T))) / 100.0;
+    }
+}
+
+function NewtonBSM(Flag, S, X, r, T, MV){
+    
+    var vol, v_i, diff, tol;
+    tol = 1.0e-9;
+
+    if (Flag ==='c'){
+        vol = Math.sqrt(2.0*Math.PI /T) * MV / S;
+    }
+    else{
+        vol = Math.sqrt(2.0*Math.PI /T) * ((S - X * Math.exp(-r * T) + MV) / S);
+    }
+    
+    for (i = 0; i < 100; i++){
+
+        v_i = vol - (BSM(Flag, S, X, vol, r, T) - MV) / (vega(S, X, vol, r, T) * 100);
+        diff = Math.abs(v_i - vol);
+
+        if(diff < tol){
+            return v_i;
+        }
+        vol = v_i;
+    }
+}
+
+
+
+
+</pre>
+</div>
+
+<br>
+<br>
+<script>
+prettyPrint();
+</script>
