@@ -1,12 +1,45 @@
----
 
----
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 60px;
+  background: #f5f5f5;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 60px;
+  background-color: #376092;
+}
 
-{% include css/reset.css %}
-{% include css/common.css %}
-{% include css/header.css %}
-{% include css/footer.css %}
-{% include css/prettify.css %}
-{% include css/bsmjavascript.css %}
-{% include css/contact.css %}
-{% include css/sirjavascript.css %}
+
+.header {
+  background-color: #376092;
+
+}
+
+.navbar a {
+  font-size: 20px !important;
+}
+
+
+/*Just used for setting width of the pre code shown on projects */
+.code-wrapper {
+  width: 900px;
+}
+
+/*
+@media (min-width: 1200px) {
+  .container-custom {
+    width: 980px;
+  }
+}
+*/

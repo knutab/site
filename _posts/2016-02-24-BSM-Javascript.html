@@ -1,125 +1,163 @@
 ---
-layout: defaultproject
+layout: default
 title: Black Scholes calculator in Javascript
 meta: Black-Scholes option pricing formula and some additional calculations in an online calculator. Project includes the javascript formulas and the running example on the site.
 categories: project
+tags: javascript
+img_name: bsm_js_small.jpg
+permalink: /:title.html
 ---
 
 <script src="{{site.baseurl}}/js/bsm.js"> </script>
 <br>
 <br>
+<br>
 <h1> Black Scholes Calculator implemented using Javascript</h1>
 <br>
-<p> All the formulas used here is the same ones that is used in the <a href="{{site.baseurl}}/project/2015/12/31/BSM-Calculator.html">Black Scholes Option Pricing Calculator in Python</a> project. </p>
+<p> All the formulas used here is the same ones that is used in the <a href="{{ site.baseurl }}{% link _posts/2015-12-31-BSM-Calculator.html %}">Black Scholes Option Pricing Calculator in Python</a> project. </p>
 <br>
 <br>
-<center>
+
 <form>
+<div class="row">
+    
+    <div class="col-md-6">
 
-            <div>
-                <fieldset id="left-field">
-                    <legend> User Inputs </legend>
-                    <div>
-
-                        <input type="radio" name="type" value="c">Call
-                        <br>
-                        <input type="radio" name="type" value="p">Put
-
-                        <br>
-                        <br>
-                        <label>
-                            <span>Stock Price</span><input NAME="price" id="price" type="text"/>
-                        </label>
-                        <br>
-                        <br>
-                        <label>
-                            <span>Strike Price</span><input NAME="strike" id="strike" type="text"/>
-                        </label>
-                        <br>
-                        <br>
-                        <label>
-                            <span>Risk Free Rate</span><input NAME="riskfree" id="riskfree" type="text"/>
-                        </label>
-                        <br>
-                        <br>
-                        <label>
-                            <span>Standard deviation</span><input NAME="std" id="std" type="text"/>
-                        </label>
-                        <br>
-                        <br>
-                        <label>
-                            <span>Days to Expiration</span><input NAME="time" id="time" type="text"/>
-                        </label>
-                        <br>
-                        <br>
-                        <label>
-                            <span>Market Value</span><input NAME="MV" id="MV" type="text"/>
-                        </label>
-                        <br>
-                        <br>
-                        <label>
-                            <input type="button" value="Calculate" onClick="run(this.form)" />
-                        </label>
-                        <br>
-                        <br>
-                    </div>
-                </fieldset>
-
-                <fieldset id="right-field">
-                    <legend> Calculation Outputs </legend>
-                    <div>
-                        <br>
-                        <label>
-                            <span>Option Value</span><input disabled="disabled" NAME="value" id="value" type="text"/>   
-                        </label>
-                        <br>
-                        <br>
-                        <label>
-                            <span>Intrensic Value</span><input disabled="disabled" NAME="IV" id="IV" type="text"/>   
-                        </label>
-                        <br>
-                        <br>
-                        <label>
-                            <span>Time Value</span><input disabled="disabled" NAME="TV" id="TV" type="text"/>   
-                        </label>
-                        <br>
-                        <br>
-                        <label>
-                            <span>Delta</span><input disabled="disabled" NAME="delta" id="delta" type="text"/>   
-                        </label>
-                        <br>
-                        <br>
-                        <label>
-                            <span>Vega 1%</span><input disabled="disabled" NAME="vega" id="vega" type="text"/>   
-                        </label>
-                        <br>
-                        <br>
-                        <label>
-                            <span>Gamma</span><input disabled="disabled" NAME="gamma" id="gamma" type="text"/>   
-                        </label>
-                        <br>
-                        <br>
-                        <label>
-                            <span>Theta / 365</span><input disabled="disabled" NAME="theta" id="theta" type="text"/>   
-                        </label>
-                        <br>
-                        <br>
-                        <label>
-                            <span>Rho 1%</span><input disabled="disabled" NAME="rho" id="rho" type="text"/>   
-                        </label>
-                        <br>
-                        <br>
-                        <label>
-                            <span>Implied Volatility</span><input disabled="disabled" NAME="imp" id="imp" type="text"/>   
-                        </label>
-                       
-
-                    </div>
-                </fieldset>
-            
+        <div class="form-group row">
+            <div class="col-3">
             </div>
-            
-            <script> 
+
+            <div class="col-3">
+                <input type="radio" name="type" value="c">Call
+                <br>
+                <input type="radio" name="type" value="p">Put
+
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <label for="example-text-input" class="col-3 col-form-label">Stock Price</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" id="price" NAME="price">
+                </div>
+        </div>
+        
+        <div class="form-group row">
+            <label for="example-search-input" class="col-3 col-form-label">Strike Price</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" id="strike" NAME="strike">
+                </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="example-search-input" class="col-3 col-form-label">Risk Free Rate</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" id="riskfree" NAME="riskfree">
+                </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="example-search-input" class="col-3 col-form-label">Standard Deviation</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" id="std" TEXT="std">
+                </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="example-search-input" class="col-3 col-form-label">Days to Expiration</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" id="time" NAME="time">
+                </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="example-search-input" class="col-3 col-form-label">Market Value</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" id="MV" NAME="MV">
+                </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-6">
+                <label>
+                    <input type="button" class="form-control" value="Calculate" onClick="run(this.form)" />
+                </label>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="col-md-6">
+        
+        <div class="form-group row">
+            <label for="example-text-input" class="col-3 col-form-label">Option Value</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" disabled="disabled" id="value" NAME="value">
+                </div>
+        </div>
+        
+        <div class="form-group row">
+            <label for="example-search-input" class="col-3 col-form-label">Intrensic Value</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" disabled="disabled" id="IV" NAME="IV">
+                </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="example-search-input" class="col-3 col-form-label">Time Value</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" disabled="disabled" id="TV" NAME="TV">
+                </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="example-search-input" class="col-3 col-form-label">Delta</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" disabled="disabled" id="delta" NAME="delta">
+                </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="example-search-input" class="col-3 col-form-label">Vega 1%</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" disabled="disabled" id="vega" NAME="vega">
+                </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="example-search-input" class="col-3 col-form-label">Gamma</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" disabled="disabled" id="gamma" NAME="gamma">
+                </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="example-search-input" class="col-3 col-form-label">Theta / 365</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" disabled="disabled" id="theta" NAME="theta">
+                </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="example-search-input" class="col-3 col-form-label">Rho 1%</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" disabled="disabled" id="rho" NAME="rho">
+                </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="example-search-input" class="col-3 col-form-label">Implied Volatility</label>
+                <div class="col-3">
+                    <input class="form-control" type="text" disabled="disabled" id="imp" NAME="imp">
+                </div>
+        </div>
+
+    </div>
+
+</div>
+
+        <script> 
             function run(form){
                 
                 var S = parseFloat(form.price.value);
@@ -149,15 +187,24 @@ categories: project
                 document.getElementById('gamma').value = gamma(S, X, v, r, T).toFixed(4);
                 document.getElementById('theta').value = theta(Flag, S, X, v, r, T).toFixed(4);
                 document.getElementById('rho').value = rho(Flag, S, X, v, r, T).toFixed(4);
-                document.getElementById('imp').value = NewtonBSM(Flag, S, X, r, T, MV).toFixed(4);
-                
-               
+                document.getElementById('imp').value = NewtonBSM(Flag, S, X, r, T, MV).toFixed(4);  
             }
-            </script>
-        
-</form>
-</center>
+        </script>
 
+</form>
+
+<br>
+<br>
+
+
+
+
+
+
+            
+          
+            
+            
 <br>
 <br>
 <br>
@@ -332,8 +379,6 @@ function NewtonBSM(Flag, S, X, r, T, MV){
 </div>
 
 <br>
-
-<p> In addition to this code there is some styling written in CSS and a JavaScript function to link it all together. </p>
 <br>
 <script>
 prettyPrint();
