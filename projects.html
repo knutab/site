@@ -4,22 +4,22 @@ layout: default
 
 <br>
 <br>
-<h2>List Of Projects:</h2>
 <br>
 <br>
   <ul class="list-unstyled">
     {% for projects in site.categories.project %}
     <li>
-      <h3><a class="list" href="{{site.baseurl}}{{projects.url}}">{{projects.title}}</a></h3>
+      <h4><a class="list" href="{{site.baseurl}}{{projects.url}}">{{projects.title}}</a></h4>
       <div class="row">
         <div class="col-lg-4">
-          <img src="img/{{projects.img_name}}" class="img-rounded" alt="" width="280" height="240"> 
+          <center><img src="img/{{projects.img_name}}" class="img-rounded" alt="" width="280" height="240"> </center>
         </div>
         <div class="col-lg-8">
           <br>
-          <h4>{{projects.meta}}</a></h4>
+          <h5><p>{{projects.meta}}</p></a></h5>
         </div>
       </div>
+      <br>
       <br>
       <br>
     </li>
