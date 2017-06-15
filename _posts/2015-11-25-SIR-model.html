@@ -11,7 +11,7 @@ permalink: /:title.html
 <br>
 <br>
 <br>
-<h1> Implementing and solving the SIR model in Python </h1>
+<h4> Implementing and solving the SIR model in Python </h4>
 <br>
 <br>
 <p> This project will use the following Python packages that is not included as standard and have to be installed manually.</p>
@@ -19,7 +19,7 @@ permalink: /:title.html
 <p> Matplotlib</p>
 <br>
 <br>
-<h2> The SIR Model </h2>
+<h5> The SIR Model </h5>
 <br>
 <p>The SIR model is a simplistic model used to describe the transmission of disease. For more information about is se  <a href="https://en.wikipedia.org/wiki/Epidemic_model">THIS</a> Wikipedia article. The thing that makes this model interesting as a coding example is because it is a example of a system of differential equations. Models like this will often not have an analytical solution. One simple way to solve them will then be to use numerical methods implemented using some programming language.</p>
 <br>
@@ -46,7 +46,7 @@ permalink: /:title.html
     </ul>
 <br>
 <br>
-<h2> Solving using numerical methods </h2>
+<h5> Solving using numerical methods </h5>
 <br>
 <p> The first step to solve this is first to transform the problem using Euler method. There are lots of different methods that can be used, but the Euler method is one of the simplest.</p>
 <br>
@@ -70,7 +70,7 @@ permalink: /:title.html
 <p> And we want to see how the disease develops over the time period from \(t = 0 \) to \(t = 60 \) days, with time increments \(\vartriangle t = 0.5\). . In addition we can see from the equations that the total population should remain constant equal to \(S_0 + I_0 + R_0 \). To check that the implementation is correct we can add in a condition that checks that this is true for each iteration given some margin of error. I implement the system in a function where we can choose the beta value.</p>
 <br>
 <br>
-<div class="code-wrapper">
+
 <pre class="prettyprint linenums:">
 
 import matplotlib.pyplot as plt
@@ -146,19 +146,19 @@ run(0.0010)
 run(0.0001)
 
 </pre>
-</div>
+
 <br>
 <br>
 <p> And this is the resulting figures showing the evolution of the disease given different beta values</p>
 <br>
 <center>
-    <img src = "{{site.baseurl}}/img/SIR/beta 0.0005.png" >
+    <img src = "{{site.baseurl}}/img/SIR/beta 0.0005.png" class="img-fluid" alt="Responsive image">
 <br>
 <br>
-    <img src = "{{site.baseurl}}/img/SIR/beta 0.0010.png" >
+    <img src = "{{site.baseurl}}/img/SIR/beta 0.0010.png" class="img-fluid" alt="Responsive image">
 <br>
 <br>
-    <img src = "{{site.baseurl}}/img/SIR/beta 0.0001.png" >
+    <img src = "{{site.baseurl}}/img/SIR/beta 0.0001.png" class="img-fluid" alt="Responsive image">
 </center>
 <br>
 <br>

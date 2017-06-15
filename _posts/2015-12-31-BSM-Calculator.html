@@ -11,7 +11,7 @@ permalink: /:title.html
 <br>
 <br>
 <br>
-<h1> Black Scholes Option Pricing Calculator in Python </h1>
+<h4> Black Scholes Option Pricing Calculator in Python </h4>
 <br>
 <br>
 <p> The goal of this project is to implement the Black Scholes formula for pricing European Options in python and some of the Greeks, and add a nice GUI to it using Tkinter. The project is divided into three parts where the first one is an overview of the formulas used. The second part is the implementation of the formulas in Python, and the third part is adding a GUI and compiling it into a standalone .exe file.</p>
@@ -47,7 +47,7 @@ permalink: /:title.html
 
 <br>
 <br>
-<h2> Part 1: formulas </h2>
+<h5> Part 1: formulas </h5>
 <br>
 <br>
 <strong> The Black Scholes formulas for pricing the Option Contracts </strong>
@@ -141,14 +141,14 @@ K-S, & \text{if $K-S$ > 0} \\
 <br>
 <br>
 <br>
-<h2> Part 2: implementation </h2>
+<h5> Part 2: implementation </h5>
 <br>
 <p> To keep the implementation simple I choose to set \(t=0 \) i.e I assume we want to calculate the value from the present time up to \(T\), in addition the time to expiration uses a base of 365 days a year. So when a value for T is entered it is actually \(\frac{T}{365}\) this means that T should be entered as number of days to expiration.</p>
 
 <br>
 <br>
 
-<div class="code-wrapper">
+
 <pre class="prettyprint linenums:">
 from math import *
 
@@ -282,7 +282,7 @@ def NewtonBSM(Flag,S,X,r,T,MV):
         vol = v_i
 
 </pre>
-</div>
+
 
 <br>
 <br>
@@ -292,7 +292,7 @@ def NewtonBSM(Flag,S,X,r,T,MV):
 <p> Now we have written all the code needed for the functions, the next step now is to create the GUI. This part of the coding requires
 using the Tkinter Python package. Before I start putting together the GUI there is one more function needed. The calculateall(): function is used to get the user inputs from the input boxes later used in the GUI, run the functions created earlier, and then display the output in designated boxes. </p>
 <br>
-<div class="code-wrapper">
+
 <pre class="prettyprint linenums:137">
 
 def calculateall():
@@ -445,35 +445,35 @@ button1 = ttk.Button(text="Calculate", command=calculateall).place(x=50, y=260)
 root.mainloop()
 
 </pre>
-</div>
+
 <br>
 <p>Now all of the basic functionality is up, and the program is ready to run. Here are some example pictures of the result when running the program </p>
 
 <br>
 <br>
 <center>
-<img src = "{{site.baseurl}}/img/BSM/Picture 1.png" >
+<img src = "{{site.baseurl}}/img/BSM/Picture 1.png" class="img-fluid" alt="Responsive image">
 <br>
 <br>
-<img src = "{{site.baseurl}}/img/BSM/Picture 2.png" >
+<img src = "{{site.baseurl}}/img/BSM/Picture 2.png" class="img-fluid" alt="Responsive image">
 <br>
 <p>The Theta calculations in the picture is wrong, and this is corrected in the downloadable exe and the code from the script.</p>
 <br>
-<img src = "{{site.baseurl}}/img/BSM/Picture 3.png" >
+<img src = "{{site.baseurl}}/img/BSM/Picture 3.png" class="img-fluid" alt="Responsive image">
 </center>
 <br>
 <p>The Theta calculations in the picture is wrong, and this is corrected in the downloadable exe and the code from the script.</p>
 <br>
 <br>
 <br>
-<h2> Part 3: Compiling to stand alone program </h2>
+<h5> Part 3: Compiling to stand alone program </h5>
 <br>
 <br>
 <p> Compiling Python programs to stand alone exe can be made easy by using the pyinstaller package from <a href="http://www.pyinstaller.org/">http://www.pyinstaller.org</a> a easy way to install it is by using pip and typing "pip install pyinstaller" in the Command Prompt window.</p>
 <br>
 <br>
 <center>
-<img src = "{{site.baseurl}}/img/BSM/CMD window.png" >
+<img src = "{{site.baseurl}}/img/BSM/CMD window.png" class="img-fluid" alt="Responsive image">
 </center>
 <br>
 <br>
@@ -481,7 +481,7 @@ root.mainloop()
 <br>
 <br>
 <center>
-<img src = "{{site.baseurl}}/img/BSM/compiling.png" >
+<img src = "{{site.baseurl}}/img/BSM/compiling.png" class="img-fluid" alt="Responsive image">
 </center>
 <br>
 <br>
